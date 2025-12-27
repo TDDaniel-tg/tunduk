@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ky">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Айдоочулук күбөлүк</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="phone-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span class="time" id="currentTime">22:22</span>
+                <svg class="status-icon" width="17" height="17" viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M18.5 12C18.5 11.5 18.3 11 18 10.6L13.4 4.2C13 3.6 12.5 3.5 12 3.5C11.5 3.5 11 3.6 10.6 4.2L6 10.6C5.7 11 5.5 11.5 5.5 12C5.5 13.4 6.6 14.5 8 14.5C8.5 14.5 9 14.3 9.4 14L12 12L14.6 14C15 14.3 15.5 14.5 16 14.5C17.4 14.5 18.5 13.4 18.5 12Z"
+                        fill="white" />
+                    <path d="M12 12V20" stroke="white" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </div>
+            <div class="status-right">
+                <div class="signal-dots">
+                    <span class="dot-signal"></span>
+                    <span class="dot-signal"></span>
+                    <span class="dot-signal dim"></span>
+                    <span class="dot-signal dim"></span>
+                </div>
+                <span class="network-type">4G</span>
+                <div class="battery">
+                    <div class="battery-body">
+                        <div class="battery-level" id="batteryLevel"></div>
+                    </div>
+                    <span class="battery-percent" id="batteryPercent">39</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <button class="back-btn">
+                <svg width="10" height="18" viewBox="0 0 10 18" fill="none">
+                    <path d="M9 1L1 9L9 17" stroke="white" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+            <h1 class="header-title">Айдоочулук күбөлүк</h1>
+            <div class="header-spacer"></div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Card Stack Container -->
+            <div class="card-stack" id="cardStack">
+                <!-- Back Card (underneath) -->
+                <div class="stack-card back-card" id="backCardWrapper">
+                    <div class="license-card">
+                        <img id="backImage" src="" alt="Обратная сторона" class="card-image">
+                    </div>
+                </div>
+                <!-- Front Card (on top) -->
+                <div class="stack-card front-card active" id="frontCardWrapper">
+                    <div class="license-card">
+                        <img id="frontImage" src="" alt="Лицевая сторона" class="card-image">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Dots -->
+            <div class="slider-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+            </div>
+
+        </main>
+
+        <!-- Bottom Section with QR -->
+        <div class="bottom-section">
+            <!-- QR Circle -->
+            <div class="qr-circle">
+                <img id="qrImage" src="qr.jpg" alt="QR" class="qr-image">
+            </div>
+
+            <!-- White bottom bar with rounded top -->
+            <div class="bottom-bar"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
