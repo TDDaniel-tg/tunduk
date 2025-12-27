@@ -1,4 +1,4 @@
-// Card Stack functionality
+// Card Stack functionality with cloud sync
 class CardStack {
     constructor() {
         // Get page ID from URL parameter
@@ -87,33 +87,55 @@ class CardStack {
         this.currentIndex = index;
 
         if (index === 0) {
-            // Show front card
             this.frontCard.classList.add('active');
             this.frontCard.classList.remove('behind');
             this.backCard.classList.remove('active');
         } else {
-            // Show back card (front goes behind)
             this.frontCard.classList.remove('active');
             this.frontCard.classList.add('behind');
             this.backCard.classList.add('active');
         }
 
-        // Update dots
         this.dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
         });
     }
 
-    loadImages() {
-        const frontData = localStorage.getItem(`license_${this.pageId}_front`);
-        const backData = localStorage.getItem(`license_${this.pageId}_back`);
-
+    async loadImages() {
         const frontImage = document.getElementById('frontImage');
         const backImage = document.getElementById('backImage');
+        const qrImage = document.getElementById('qrImage');
 
-        // Use uploaded images or default examples
-        frontImage.src = frontData || 'photo_2025-12-27_17-55-50.jpg';
-        backImage.src = backData || 'photo_2025-12-27_17-56-00.jpg';
+        // Show loading state
+        frontImage.style.opacity = '0.5';
+        backImage.style.opacity = '0.5';
+
+        try {
+            // Try to load from cloud first
+            const pageData = await getPageData(this.pageId);
+
+            if (pageData) {
+                if (pageData.front) frontImage.src = pageData.front;
+                if (pageData.back) backImage.src = pageData.back;
+                if (pageData.qr && qrImage) qrImage.src = pageData.qr;
+            } else {
+                // Fallback to local or defaults
+                const localFront = localStorage.getItem(`license_${this.pageId}_front`);
+                const localBack = localStorage.getItem(`license_${this.pageId}_back`);
+
+                frontImage.src = localFront || 'photo_2025-12-27_17-55-50.jpg';
+                backImage.src = localBack || 'photo_2025-12-27_17-56-00.jpg';
+            }
+        } catch (error) {
+            console.error('Error loading images:', error);
+            // Fallback to defaults
+            frontImage.src = 'photo_2025-12-27_17-55-50.jpg';
+            backImage.src = 'photo_2025-12-27_17-56-00.jpg';
+        }
+
+        // Remove loading state
+        frontImage.style.opacity = '1';
+        backImage.style.opacity = '1';
     }
 }
 
