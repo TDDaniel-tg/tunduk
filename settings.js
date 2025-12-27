@@ -1,32 +1,9 @@
-// Update time in status bar
-function updateTime() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
-}
-
-// Set random battery level
-function setBatteryLevel() {
-    const level = Math.floor(Math.random() * 101);
-    const batteryLevelEl = document.getElementById('batteryLevel');
-    const batteryPercentEl = document.getElementById('batteryPercent');
-
-    batteryLevelEl.style.width = `${level}%`;
-    batteryPercentEl.textContent = level;
-
-    if (level <= 20) {
-        batteryLevelEl.style.background = '#EF5350';
-    } else if (level <= 50) {
-        batteryLevelEl.style.background = '#FFA726';
-    } else {
-        batteryLevelEl.style.background = '#66BB6A';
-    }
-}
-
 // Settings page functionality
 class SettingsManager {
     constructor() {
+        // Get page ID from URL parameter
+        this.pageId = new URLSearchParams(window.location.search).get('page') || '1';
+
         this.frontInput = document.getElementById('frontInput');
         this.backInput = document.getElementById('backInput');
         this.frontUploadArea = document.getElementById('frontUploadArea');
@@ -69,8 +46,8 @@ class SettingsManager {
 
             area.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                area.style.borderColor = '#1976D2';
-                area.style.background = 'rgba(25, 118, 210, 0.03)';
+                area.style.borderColor = '#165FBB';
+                area.style.background = 'rgba(22, 95, 187, 0.03)';
             });
 
             area.addEventListener('dragleave', (e) => {
@@ -134,7 +111,7 @@ class SettingsManager {
             this.frontUploadArea.classList.remove('has-image');
             this.removeFrontBtn.style.display = 'none';
             this.frontInput.value = '';
-            localStorage.removeItem('driverLicense_front');
+            localStorage.removeItem(`license_${this.pageId}_front`);
         } else {
             this.backImageData = null;
             this.backPreviewImage.src = '';
@@ -143,13 +120,13 @@ class SettingsManager {
             this.backUploadArea.classList.remove('has-image');
             this.removeBackBtn.style.display = 'none';
             this.backInput.value = '';
-            localStorage.removeItem('driverLicense_back');
+            localStorage.removeItem(`license_${this.pageId}_back`);
         }
     }
 
     loadExistingImages() {
-        const frontData = localStorage.getItem('driverLicense_front');
-        const backData = localStorage.getItem('driverLicense_back');
+        const frontData = localStorage.getItem(`license_${this.pageId}_front`);
+        const backData = localStorage.getItem(`license_${this.pageId}_back`);
 
         if (frontData) {
             this.frontImageData = frontData;
@@ -172,17 +149,17 @@ class SettingsManager {
 
     saveImages() {
         if (this.frontImageData) {
-            localStorage.setItem('driverLicense_front', this.frontImageData);
+            localStorage.setItem(`license_${this.pageId}_front`, this.frontImageData);
         }
 
         if (this.backImageData) {
-            localStorage.setItem('driverLicense_back', this.backImageData);
+            localStorage.setItem(`license_${this.pageId}_back`, this.backImageData);
         }
 
         this.showToast('Сакталды!');
 
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = `index.html?page=${this.pageId}`;
         }, 1000);
     }
 
@@ -208,9 +185,5 @@ class SettingsManager {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    updateTime();
-    setBatteryLevel();
     new SettingsManager();
-
-    setInterval(updateTime, 60000);
 });

@@ -1,33 +1,9 @@
-// Update time in status bar
-function updateTime() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
-}
-
-// Set random battery level
-function setBatteryLevel() {
-    const level = Math.floor(Math.random() * 101); // 0 to 100
-    const batteryLevelEl = document.getElementById('batteryLevel');
-    const batteryPercentEl = document.getElementById('batteryPercent');
-
-    batteryLevelEl.style.width = `${level}%`;
-    batteryPercentEl.textContent = level;
-
-    // Change color based on level
-    if (level <= 20) {
-        batteryLevelEl.style.background = '#EF5350';
-    } else if (level <= 50) {
-        batteryLevelEl.style.background = '#FFA726';
-    } else {
-        batteryLevelEl.style.background = '#66BB6A';
-    }
-}
-
 // Card Stack functionality
 class CardStack {
     constructor() {
+        // Get page ID from URL parameter
+        this.pageId = new URLSearchParams(window.location.search).get('page') || '1';
+
         this.cardStack = document.getElementById('cardStack');
         this.frontCard = document.getElementById('frontCardWrapper');
         this.backCard = document.getElementById('backCardWrapper');
@@ -129,8 +105,8 @@ class CardStack {
     }
 
     loadImages() {
-        const frontData = localStorage.getItem('driverLicense_front');
-        const backData = localStorage.getItem('driverLicense_back');
+        const frontData = localStorage.getItem(`license_${this.pageId}_front`);
+        const backData = localStorage.getItem(`license_${this.pageId}_back`);
 
         const frontImage = document.getElementById('frontImage');
         const backImage = document.getElementById('backImage');
@@ -143,10 +119,5 @@ class CardStack {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    updateTime();
-    setBatteryLevel();
     new CardStack();
-
-    // Update time every minute
-    setInterval(updateTime, 60000);
 });
